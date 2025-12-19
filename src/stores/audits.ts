@@ -36,17 +36,20 @@ export const useAudits = defineStore("audits", {
       console.info("Fetching audit", id);
       // mocked network request
       const audit = await new Promise<Audit>((resolve, reject) => {
-        setTimeout(() => {
-          const audit = mockedApiData.find((a) => a.id === id);
-          if (audit) {
-            resolve({
-              name: audit.name,
-              pages: audit.pages.map((p) => ({ name: p.name, slug: p.slug })),
-            });
-          } else {
-            reject(`Audit ${id} not found.`);
-          }
-        }, 200);
+        setTimeout(
+          () => {
+            const audit = mockedApiData.find((a) => a.id === id);
+            if (audit) {
+              resolve({
+                name: audit.name,
+                pages: audit.pages.map((p) => ({ name: p.name, slug: p.slug })),
+              });
+            } else {
+              reject(`Audit ${id} not found.`);
+            }
+          },
+          200 + Math.random() * 300,
+        );
       });
       this.audits[id] = audit;
     },
@@ -61,18 +64,21 @@ export const useAudits = defineStore("audits", {
       console.info("Fetching page", key);
       // mocked network request
       const page = await new Promise<Page>((resolve, reject) => {
-        setTimeout(() => {
-          const audit = mockedApiData.find((a) => a.id === auditId);
-          const page = audit?.pages.find((p) => p.slug === slug);
-          if (page) {
-            resolve({
-              name: page.name,
-              comment: page.comment,
-            });
-          } else {
-            reject(`Page ${key} not found.`);
-          }
-        }, 200);
+        setTimeout(
+          () => {
+            const audit = mockedApiData.find((a) => a.id === auditId);
+            const page = audit?.pages.find((p) => p.slug === slug);
+            if (page) {
+              resolve({
+                name: page.name,
+                comment: page.comment,
+              });
+            } else {
+              reject(`Page ${key} not found.`);
+            }
+          },
+          200 + Math.random() * 300,
+        );
       });
 
       this.pages[key] = page;

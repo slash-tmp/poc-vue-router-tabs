@@ -131,5 +131,6 @@ function selectLastTab() {
 
 .panel-container {
   border: 1px solid white;
+  padding: 1rem;
 }
 </style>

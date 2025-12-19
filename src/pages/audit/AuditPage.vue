@@ -22,6 +22,20 @@ const page = computed(
 <template>
   <template v-if="page">
     <h3>{{ page.name }}</h3>
-    <p>{{ page.comment }}</p>
+    <div class="field">
+      <label for="comment-input">Comment</label>
+      <textarea id="comment-input" v-model="page.comment" rows="10" />
+    </div>
   </template>
 </template>
+
+<style scoped>
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+textarea {
+  font: inherit;
+}
+</style>

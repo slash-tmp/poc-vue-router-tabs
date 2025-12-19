@@ -40,14 +40,9 @@ const tabs = computed<TabItem[]>(() =>
 <template>
   <template v-if="audit">
     <h2>Audit #{{ route.params.id }}</h2>
-    <p>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum labore ut
-      ex, excepturi doloremque maiores ipsa inventore a in consequatur accusamus
-      harum ipsam dolorem officiis pariatur, tenetur asperiores odio doloribus?
-    </p>
-
-    <SimpleTabs :tabs="tabs">
-      <RouterView />
-    </SimpleTabs>
   </template>
+
+  <SimpleTabs :tabs="tabs">
+    <RouterView />
+  </SimpleTabs>
 </template>
