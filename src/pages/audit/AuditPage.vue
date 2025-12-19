@@ -5,6 +5,6 @@ const route = useRoute();
 </script>
 
 <template>
-  <h3>Audit page</h3>
+  <h3>Page #{{ route.params.page }}</h3>
   <p>{{ route.fullPath }}</p>
 </template>

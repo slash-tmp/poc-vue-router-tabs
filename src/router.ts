@@ -9,7 +9,7 @@ import AuditPage from "./pages/audit/AuditPage.vue";
 
 const routes: RouteRecordRaw[] = [
   {
-    path: "/audit",
+    path: "/audit/:id",
     component: Audit,
     children: [
       {
