@@ -1,6 +1,11 @@
 <script setup lang="ts">
-import { computed, ref, useId, useTemplateRef } from "vue";
-import { RouterLink, type RouteLocationRaw } from "vue-router";
+import { computed, ref, useId, useTemplateRef, watch } from "vue";
+import {
+  RouterLink,
+  useRoute,
+  useRouter,
+  type RouteLocationRaw,
+} from "vue-router";
 
 defineExpose({
   getSelectedTabLabel: () => selectedTab.value?.label,
@@ -72,6 +77,25 @@ function selectFirstTab() {
 function selectLastTab() {
   selectTab(props.tabs.length - 1);
 }
+
+// Make sure link tabs stay sync’d with current route when navigation is
+// triggered by *not the tabs*
+const route = useRoute();
+const router = useRouter();
+watch(
+  () => route.path,
+  (path) => {
+    console.log(path);
+    props.tabs.forEach((tab, i) => {
+      if (tab.to) {
+        const resolved = router.resolve(tab.to);
+        if (resolved.path === path) {
+          selectTab(i);
+        }
+      }
+    });
+  },
+);
 </script>
 
 <template>

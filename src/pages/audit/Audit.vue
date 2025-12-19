@@ -1,15 +1,8 @@
 <script setup lang="ts">
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import SimpleTabs, { type TabItem } from "../../components/SimpleTabs.vue";
-import { computed, onMounted, watch } from "vue";
+import { computed, watch } from "vue";
 import { useAudits } from "../../stores/audits";
-
-// const tabs: TabItem[] = [
-//   { label: "Éléments transverses", to: "/audit/1234/elements-transverses" },
-//   { label: "Accueil", to: "/audit/1234/accueil" },
-//   { label: "Contact", to: "/audit/1234/contact" },
-//   { label: "Notes" },
-// ];
 
 const route = useRoute();
 const audits = useAudits();
@@ -24,6 +17,21 @@ watch(
 );
 
 const audit = computed(() => audits.audits[route.params.id as string]);
+
+// when audit is loaded and there are no active page, navigate to first page
+// /audit/xxx   =>   /audit/xxx/first-page
+const router = useRouter();
+watch(
+  [audit, () => route.name],
+  ([audit, routeName]) => {
+    if (audit && routeName === "AuditRoot") {
+      if (audit.pages[0]) {
+        router.replace(`/audit/${route.params.id}/${audit.pages[0].slug}`);
+      }
+    }
+  },
+  { immediate: true },
+);
 
 const tabs = computed<TabItem[]>(() =>
   audit.value

@@ -11,6 +11,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: "/audit/:id",
     component: Audit,
+    name: "AuditRoot",
     children: [
       {
         name: "AuditPage",

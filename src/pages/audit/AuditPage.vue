@@ -6,6 +6,7 @@ import { useAudits } from "../../stores/audits";
 const route = useRoute();
 const audits = useAudits();
 
+// fetch page on load and audit/page change
 watch(
   [() => route.params.id, () => route.params.page],
   ([auditId, pageSlug]) => {
