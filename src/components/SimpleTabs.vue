@@ -118,13 +118,21 @@ watch(
           @keydown.home.prevent="selectFirstTab"
           @keydown.end.prevent="selectLastTab"
         >
+
           {{ tab.label }}
         </component>
       </li>
     </ul>
   </div>
   <div class="panel-container">
-    <slot />
+    <div
+      :id="panelId(selectedTabIndex)"
+      :aria-labelledby="tabId(selectedTabIndex)"
+      role="tabpanel"
+      tabindex="0"
+    >
+      <slot :selected-tab-index="selectedTabIndex"/>
+    </div>
   </div>
 </template>
 
