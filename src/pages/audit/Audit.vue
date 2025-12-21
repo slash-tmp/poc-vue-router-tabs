@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from "vue-router";
 import SimpleTabs, { type TabItem } from "../../components/SimpleTabs.vue";
-import { computed, watch } from "vue";
+import { computed, useTemplateRef, watch } from "vue";
 import { useAudits } from "../../stores/audits";
 
 const route = useRoute();
@@ -36,12 +36,27 @@ watch(
 const tabs = computed<TabItem[]>(() =>
   audit.value
     ? audit.value.pages.map(
-        (page): TabItem => ({
+        (page) => ({
           label: page.name,
           to: `/audit/${route.params.id as string}/${page.slug}`,
         }),
       )
     : [],
+);
+
+// Make sure link tabs stay sync’d with current route when navigation is
+// triggered by *not the tabs*
+const tabsRef = useTemplateRef<InstanceType<typeof SimpleTabs>>("simple-tabs")
+watch(
+  () => route.path,
+  (path) => {
+    const tabToSelectIndex = tabs.value.findIndex(t =>
+      t.to && router.resolve(t.to).path === path
+    )
+    if (tabToSelectIndex !== -1){
+      tabsRef.value?.selectTab(tabToSelectIndex)
+    }
+  },
 );
 </script>
 
@@ -50,7 +65,7 @@ const tabs = computed<TabItem[]>(() =>
     <h2>Audit #{{ route.params.id }}</h2>
   </template>
 
-  <SimpleTabs :tabs="tabs">
+  <SimpleTabs :tabs="tabs" ref="simple-tabs">
     <RouterView />
   </SimpleTabs>
 </template>

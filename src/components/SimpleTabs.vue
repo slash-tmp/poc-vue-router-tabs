@@ -1,18 +1,13 @@
 <script setup lang="ts">
-import { computed, ref, useId, useTemplateRef, watch } from "vue";
+import { ref, useId, useTemplateRef } from "vue";
 import {
   RouterLink,
-  useRoute,
-  useRouter,
   type RouteLocationRaw,
 } from "vue-router";
 
-defineExpose({
-  getSelectedTabLabel: () => selectedTab.value?.label,
-});
-
 export interface TabItem {
   label: string;
+  /** If present, the tab is rendered as a `<RouterLing>` */
   to?: RouteLocationRaw;
 }
 
@@ -31,10 +26,6 @@ const uniqueId = useId();
 const emit = defineEmits<{
   (e: "selectedTabChange", selectedTabIndex: number): void;
 }>();
-
-const selectedTab = computed(() => {
-  return props.tabs[selectedTabIndex.value];
-});
 
 function tabId(i: number) {
   return `tab-${uniqueId}-${i}`;
@@ -78,24 +69,9 @@ function selectLastTab() {
   selectTab(props.tabs.length - 1);
 }
 
-// Make sure link tabs stay sync’d with current route when navigation is
-// triggered by *not the tabs*
-const route = useRoute();
-const router = useRouter();
-watch(
-  () => route.path,
-  (path) => {
-    console.log(path);
-    props.tabs.forEach((tab, i) => {
-      if (tab.to) {
-        const resolved = router.resolve(tab.to);
-        if (resolved.path === path) {
-          selectTab(i);
-        }
-      }
-    });
-  },
-);
+defineExpose({
+  selectTab
+})
 </script>
 
 <template>
